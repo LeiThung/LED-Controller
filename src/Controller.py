@@ -1,62 +1,43 @@
 import RPi.GPIO as GPIO
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from time import sleep
 
-# --- GPIO Setup ---
-LED_PIN = 18
+# Pins
+RED_PIN = 17
+GREEN_PIN = 27
+BLUE_PIN = 22
+
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(LED_PIN, GPIO.OUT)
-GPIO.output(LED_PIN, GPIO.LOW)
+GPIO.setup(RED_PIN, GPIO.OUT)
+GPIO.setup(GREEN_PIN, GPIO.OUT)
+GPIO.setup(BLUE_PIN, GPIO.OUT)
 
-# --- Webserver Handler ---
-class LEDHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == "/led/on":
-            GPIO.output(LED_PIN, GPIO.HIGH)
-            self._respond("LED ist AN")
-        elif self.path == "/led/off":
-            GPIO.output(LED_PIN, GPIO.LOW)
-            self._respond("LED ist AUS")
-        elif self.path == "/":
-            self._respond(self._html_page())
-        else:
-            self.send_error(404, "Seite nicht gefunden")
+def led_off():
+    GPIO.output(RED_PIN, GPIO.LOW)
+    GPIO.output(GREEN_PIN, GPIO.LOW)
+    GPIO.output(BLUE_PIN, GPIO.LOW)
 
-    def _respond(self, content, content_type="text/html"):
-        self.send_response(200)
-        self.send_header("Content-type", content_type)
-        self.end_headers()
-        if isinstance(content, str):
-            content = content.encode("utf-8")
-        self.wfile.write(content)
+def led_red():
+    led_off()
+    GPIO.output(RED_PIN, GPIO.HIGH)
 
-    def _html_page(self):
-        return """
-        <html>
-        <head><title>LED Steuerung</title></head>
-        <body>
-            <h1>LED Steuerung</h1>
-            <form action="/led/on" method="get">
-                <button type="submit">LED AN</button>
-            </form>
-            <form action="/led/off" method="get">
-                <button type="submit">LED AUS</button>
-            </form>
-        </body>
-        </html>
-        """
+def led_green():
+    led_off()
+    GPIO.output(GREEN_PIN, GPIO.HIGH)
 
-# --- Server Start ---
-def run(server_class=HTTPServer, handler_class=LEDHandler, port=8080):
-    server_address = ("0.0.0.0", port)  # Lauscht auf allen Interfaces
-    httpd = server_class(server_address, handler_class)
-    print(f"Starte Webserver auf http://0.0.0.0:{port}")
-    try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:
-        print("\nServer wird beendet...")
-    finally:
-        GPIO.cleanup()
-        print("GPIO aufgeräumt.")
+def led_blue():
+    led_off()
+    GPIO.output(BLUE_PIN, GPIO.HIGH)
 
-if __name__ == "__main__":
-    run()
+try:
+    while True:
+        led_red()
+        sleep(1)
+        led_green()
+        sleep(1)
+        led_blue()
+        sleep(1)
+except KeyboardInterrupt:
+    pass
+finally:
+    led_off()
+    GPIO.cleanup()
