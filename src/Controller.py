@@ -42,7 +42,8 @@ def fade(from_led, to_led, steps=50, delay=0.02):
         to_led.value = i / steps
         sleep(delay)
 
-app.run(port=5000)
+if __name__ == "__main__":
+    app.run(port=5000)
 
 
 try:
