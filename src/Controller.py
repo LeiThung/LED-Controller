@@ -1,47 +1,33 @@
-import RPi.GPIO as GPIO
+from gpiozero import PWMLED
 from time import sleep
 
-# Pins
-RED_PIN = 3
-GREEN_PIN = 5
-BLUE_PIN = 7
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(RED_PIN, GPIO.OUT)
-GPIO.setup(GREEN_PIN, GPIO.OUT)
-GPIO.setup(BLUE_PIN, GPIO.OUT)
-
-# PWM für jede Farbe
-r = GPIO.PWM(RED_PIN, 100)
-g = GPIO.PWM(GREEN_PIN, 100)
-b = GPIO.PWM(BLUE_PIN, 100)
-
-r.start(0)
-g.start(0)
-b.start(0)
+# Pins (BCM)
+red = PWMLED(4)    # physischer Pin 7
+green = PWMLED(3)  # physischer Pin 5
+blue = PWMLED(2)   # physischer Pin 3
 
 def led_off():
-    GPIO.output(RED_PIN, GPIO.LOW)
-    GPIO.output(GREEN_PIN, GPIO.LOW)
-    GPIO.output(BLUE_PIN, GPIO.LOW)
+    red.off()
+    green.off()
+    blue.off()
 
 def led_red():
     led_off()
-    GPIO.output(RED_PIN, GPIO.HIGH)
+    red.value = 1
 
 def led_green():
     led_off()
-    GPIO.output(GREEN_PIN, GPIO.HIGH)
+    green.value = 1
 
 def led_blue():
     led_off()
-    GPIO.output(BLUE_PIN, GPIO.HIGH)
+    blue.value = 1
 
-def fade(from_pwm, to_pwm):
-    for i in range(0, 101, 2):
-        from_pwm.ChangeDutyCycle(100 - i)
-        to_pwm.ChangeDutyCycle(i)
-        sleep(0.02)
+def fade(from_led, to_led, steps=50, delay=0.02):
+    for i in range(steps + 1):
+        from_led.value = 1 - i / steps
+        to_led.value = i / steps
+        sleep(delay)
 
 try:
     while True:
@@ -51,12 +37,12 @@ try:
         sleep(1)
         led_blue()
         sleep(1)
-        fade(r, g)
-        fade(g, b)
-        fade(b, r)
-        
+
+        fade(red, green)
+        fade(green, blue)
+        fade(blue, red)
+
 except KeyboardInterrupt:
     pass
 finally:
     led_off()
-    GPIO.cleanup()
