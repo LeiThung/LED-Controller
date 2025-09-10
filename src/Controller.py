@@ -2,9 +2,9 @@ import RPi.GPIO as GPIO
 from time import sleep
 
 # Pins
-RED_PIN = 17
-GREEN_PIN = 27
-BLUE_PIN = 22
+RED_PIN = 3
+GREEN_PIN = 5
+BLUE_PIN = 7
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(RED_PIN, GPIO.OUT)
