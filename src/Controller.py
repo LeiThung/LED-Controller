@@ -18,24 +18,8 @@ def led_off():
     blue.off()
     return jsonify({"status": "off"})
 
-@app.route("/api/led-red", methods=["POST"])
-def led_red():
-    led_off()
-    red.value = 1
-    return jsonify({"status": "red"})
 
-@app.route("/api/led-green", methods=["POST"])
-def led_green():
-    led_off()
-    green.value = 1
-    return jsonify({"status": "green"})
-
-@app.route("/api/led-blue", methods=["POST"])
-def led_blue():
-    led_off()
-    blue.value = 1
-    return jsonify({"status": "blue"})
-
+@app.route("/api/led-fade", methods=["POST"])
 def fade():
     steps = 100
     delay = 0.02
@@ -43,32 +27,32 @@ def fade():
     while True:
         # Red → Green
         for i in range(steps + 1):
-            r = (steps - i) / steps
-            g = i / steps
+            r = (steps - i) / steps * 255
+            g = i / steps * 255
             b = 0
-            blue.value = b
-            green.value = g
-            red.value = r
+            red.value = r / 255
+            green.value = g / 255
+            blue.value = b / 255
             sleep(delay)
 
         # Green → Blue
         for i in range(steps + 1):
             r = 0
-            g = (steps - i) / steps
-            b = i / steps
-            blue.value = b
-            green.value = g
-            red.value = r
+            g = (steps - i) / steps * 255
+            b = i / steps * 255
+            red.value = r / 255
+            green.value = g / 255
+            blue.value = b / 255
             sleep(delay)
 
         # Blue → Red
         for i in range(steps + 1):
-            r = i / steps
+            r = i / steps * 255
             g = 0
-            b = (steps - i) / steps
-            blue.value = b
-            green.value = g
-            red.value = r
+            b = (steps - i) / steps * 255
+            red.value = r / 255
+            green.value = g / 255
+            blue.value = b / 255
             sleep(delay)
 
 @app.route("/api/color-picker", methods=["POST"])
