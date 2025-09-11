@@ -25,46 +25,40 @@ def led_off():
 @app.route("/api/led-fade", methods=["POST"])
 def fadeLED():
     global fade
-    fade = True
     steps = 100
     delay = 0.02
+    current_step = 0
+    phase = 0  # 0 = red→green, 1 = green→blue, 2 = blue→red
 
-    while fade:
-        # Red → Green
-        for i in range(steps + 1):
-            if not fade:
-                return  # sofort Schleife verlassen
+    while True:
+        if not fade:
+            break  # Sofort raus
+
+        i = current_step
+        if phase == 0:  # Red → Green
             r = (steps - i) / steps * 255
             g = i / steps * 255
             b = 0
-            red.value = r / 255
-            green.value = g / 255
-            blue.value = b / 255
-            sleep(delay)
-
-        # Green → Blue
-        for i in range(steps + 1):
-            if not fade:
-                return
+        elif phase == 1:  # Green → Blue
             r = 0
             g = (steps - i) / steps * 255
             b = i / steps * 255
-            red.value = r / 255
-            green.value = g / 255
-            blue.value = b / 255
-            sleep(delay)
-
-        # Blue → Red
-        for i in range(steps + 1):
-            if not fade:
-                return
+        elif phase == 2:  # Blue → Red
             r = i / steps * 255
             g = 0
             b = (steps - i) / steps * 255
-            red.value = r / 255
-            green.value = g / 255
-            blue.value = b / 255
-            sleep(delay)
+
+        # Set values (scaled to 0.0–1.0)
+        red.value = r / 255
+        green.value = g / 255
+        blue.value = b / 255
+
+        sleep(delay)
+
+        current_step += 1
+        if current_step > steps:
+            current_step = 0
+            phase = (phase + 1) % 3  # Zyklus zwischen 0, 1, 2
 
 @app.route("/api/color-picker", methods=["POST"])
 def changeColor():
