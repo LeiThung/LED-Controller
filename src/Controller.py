@@ -6,6 +6,8 @@ from time import sleep
 app = Flask(__name__)
 CORS(app)
 
+fade = False
+
 # Pins (BCM)
 red = PWMLED(4)    # physischer Pin 4
 green = PWMLED(3)  # physischer Pin 3
@@ -13,18 +15,19 @@ blue = PWMLED(2)   # physischer Pin 2
 
 @app.route("/api/led-off", methods=["POST"])
 def led_off():
+    fade = False
     red.off()
     green.off()
     blue.off()
     return jsonify({"status": "off"})
 
-
 @app.route("/api/led-fade", methods=["POST"])
-def fade():
+def fadeLED():
     steps = 100
     delay = 0.02
+    fade = True
 
-    while True:
+    while fade:
         # Red → Green
         for i in range(steps + 1):
             r = (steps - i) / steps * 255
@@ -57,6 +60,7 @@ def fade():
 
 @app.route("/api/color-picker", methods=["POST"])
 def changeColor():
+    fade = False
     try:
         data = request.get_json()
 
