@@ -12,26 +12,12 @@ function App() {
             .then((res) => res.json())
     };
 
-    const ledRed = () => {
-        fetch("http://192.168.88.103:5000/api/led-red", {
+    const Fade = () => {
+        fetch("http://192.168.88.103:5000/api/led-fade", {
             method: "POST",
         })
             .then((res) => res.json())
     };
-
-    const ledBlue = () => {
-        fetch("http://192.168.88.103:5000/api/led-blue", {
-            method: "POST",
-        })
-            .then((res) => res.json())
-    }
-
-    const ledGreen = () => {
-        fetch("http://192.168.88.103:5000/api/led-green", {
-            method: "POST",
-        })
-            .then((res) => res.json())
-    }
 
     const customLed = (value: string) => {
         setTimeout(() => {
@@ -43,16 +29,15 @@ function App() {
                 body: JSON.stringify({ color: value }),
             })
                 .then((res) => res.json());
-        }, 1000); // 500ms Pause
+        }, 500); // 500ms Pause
     };
 
   return (
     <div className="App">
         <ColorPicker onChange={(value) => {customLed(value.toRgbString())}}/>
+        <button>Change</button>
         <button onClick={ledOff}>Off</button>
-        <button onClick={ledRed}>Rot</button>
-        <button onClick={ledBlue}>Blau</button>
-        <button onClick={ledGreen}>Grün</button>
+        <button onClick={Fade}>Fade</button>
     </div>
   );
 }
