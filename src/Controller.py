@@ -75,6 +75,8 @@ def fade():
 def changeColor():
     try:
         data = request.get_json()
+
+        print(data)
         
         rgb_string = data.get("color")  # z.B. "rgb(1, 1, 1)"
         if not rgb_string:
@@ -87,6 +89,8 @@ def changeColor():
         r = float(rgb_values[0].strip())
         g = float(rgb_values[1].strip())
         b = float(rgb_values[2].strip())
+
+        print(r, g, b)
 
         # Wenn deine GPIO-PWM Werte von 0.0 bis 1.0 erwarten, kannst du sie direkt so setzen
         red.value = r
