@@ -90,12 +90,10 @@ def changeColor():
         g = float(rgb_values[1].strip())
         b = float(rgb_values[2].strip())
 
-        print(r, g, b)
-
         # Wenn deine GPIO-PWM Werte von 0.0 bis 1.0 erwarten, kannst du sie direkt so setzen
-        red.value = r
-        green.value = g
-        blue.value = b
+        red.value = r / 255
+        green.value = g / 255
+        blue.value = b / 255
 
         return jsonify({"status": "success", "r": r, "g": g, "b": b}), 200
 
