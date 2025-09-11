@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React from 'react';
 import './App.css';
 import ColorPicker from '@rc-component/color-picker';
 import '@rc-component/color-picker/assets/index.css';
@@ -34,10 +34,12 @@ function App() {
 
   return (
     <div className="App">
-        <ColorPicker onChange={(value) => {customLed(value.toRgbString())}}/>
-        <button>Change</button>
-        <button onClick={ledOff}>Off</button>
-        <button onClick={Fade}>Fade</button>
+        <p className={"Text"}>LED Dashboard</p>
+        <div className="test">
+            <ColorPicker onChange={(value) => {customLed(value.toRgbString())}}/>
+        </div>
+        <button onClick={ledOff} className={"ledOffButton"}>Off</button>
+        <button onClick={Fade} className={"ledFadeButton"}>Fade</button>
     </div>
   );
 }

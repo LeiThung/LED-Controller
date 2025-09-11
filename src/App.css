@@ -2,6 +2,50 @@
   text-align: center;
 }
 
+body {
+    background-color: #282c34;
+}
+
+.test {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.Text {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.ledOffButton {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.ledFadeButton {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
