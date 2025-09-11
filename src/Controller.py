@@ -43,23 +43,4 @@ def fade(from_led, to_led, steps=50, delay=0.02):
         sleep(delay)
 
 if __name__ == "__main__":
-    app.run(port=5000)
-
-
-try:
-    while True:
-        led_red()
-        sleep(1)
-        led_green()
-        sleep(1)
-        led_blue()
-        sleep(1)
-
-        fade(red, green)
-        fade(green, blue)
-        fade(blue, red)
-
-except KeyboardInterrupt:
-    pass
-finally:
-    led_off()
+    app.run(host="0.0.0.0",port=5000)
