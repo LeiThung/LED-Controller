@@ -25,6 +25,7 @@ def led_off():
 @app.route("/api/led-fade", methods=["POST"])
 def fadeLED():
     global fade
+    fade = True
     steps = 100
     delay = 0.02
     current_step = 0
