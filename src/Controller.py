@@ -24,14 +24,16 @@ def led_off():
 
 @app.route("/api/led-fade", methods=["POST"])
 def fadeLED():
-    steps = 100
-    delay = 0.02
     global fade
     fade = True
+    steps = 100
+    delay = 0.02
 
     while fade:
         # Red → Green
         for i in range(steps + 1):
+            if not fade:
+                return  # sofort Schleife verlassen
             r = (steps - i) / steps * 255
             g = i / steps * 255
             b = 0
@@ -42,6 +44,8 @@ def fadeLED():
 
         # Green → Blue
         for i in range(steps + 1):
+            if not fade:
+                return
             r = 0
             g = (steps - i) / steps * 255
             b = i / steps * 255
@@ -52,6 +56,8 @@ def fadeLED():
 
         # Blue → Red
         for i in range(steps + 1):
+            if not fade:
+                return
             r = i / steps * 255
             g = 0
             b = (steps - i) / steps * 255
