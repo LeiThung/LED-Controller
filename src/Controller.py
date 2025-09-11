@@ -46,9 +46,9 @@ def fade():
             r = (steps - i) / steps
             g = i / steps
             b = 0
-            led_blue = b
-            led_green = g
-            led_red = r
+            blue.value = b
+            green.value = g
+            red.value = r
             sleep(delay)
 
         # Green → Blue
@@ -56,9 +56,9 @@ def fade():
             r = 0
             g = (steps - i) / steps
             b = i / steps
-            led_blue = b
-            led_green = g
-            led_red = r
+            blue.value = b
+            green.value = g
+            red.value = r
             sleep(delay)
 
         # Blue → Red
@@ -66,21 +66,34 @@ def fade():
             r = i / steps
             g = 0
             b = (steps - i) / steps
-            led_blue = b
-            led_green = g
-            led_red = r
+            blue.value = b
+            green.value = g
+            red.value = r
             sleep(delay)
 
 @app.route("/api/color-picker", methods=["POST"])
 def changeColor():
     try:
         data = request.get_json()
+        
+        rgb_string = data.get("color")  # z.B. "rgb(1, 1, 1)"
+        if not rgb_string:
+            return jsonify({"error": "No color provided"}), 400
 
-        r = int(data.get("r", 0))
-        g = int(data.get("g", 0))
-        b = int(data.get("b", 0))
+        # Entferne "rgb(" und ")" und splitte nach Komma
+        rgb_values = rgb_string.strip()[4:-1].split(",")
+        
+        # Konvertiere Strings in Float oder Int und normalisiere falls nötig
+        r = float(rgb_values[0].strip())
+        g = float(rgb_values[1].strip())
+        b = float(rgb_values[2].strip())
 
-        return jsonify({"status": "success"}), 200
+        # Wenn deine GPIO-PWM Werte von 0.0 bis 1.0 erwarten, kannst du sie direkt so setzen
+        red.value = r
+        green.value = g
+        blue.value = b
+
+        return jsonify({"status": "success", "r": r, "g": g, "b": b}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
