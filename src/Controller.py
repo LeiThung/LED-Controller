@@ -15,6 +15,7 @@ blue = PWMLED(2)   # physischer Pin 2
 
 @app.route("/api/led-off", methods=["POST"])
 def led_off():
+    global fade
     fade = False
     red.off()
     green.off()
@@ -25,6 +26,7 @@ def led_off():
 def fadeLED():
     steps = 100
     delay = 0.02
+    global fade
     fade = True
 
     while fade:
@@ -60,6 +62,7 @@ def fadeLED():
 
 @app.route("/api/color-picker", methods=["POST"])
 def changeColor():
+    global fade
     fade = False
     try:
         data = request.get_json()
